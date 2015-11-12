@@ -19,15 +19,8 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
     var audioRecorder:AVAudioRecorder!
     var recordedAudio:RecordedAudio!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-
-    }
-    
     override func viewWillAppear(animated: Bool) {
         stopButton.hidden = true
-//        recordButton.enabled = true
         recordingInProgress.hidden = false
         recordingInProgress.text = "tap to record"
     }
@@ -36,7 +29,6 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
         if recordingInProgress.text! == "tap to record" {
             recordingInProgress.text = "recording...\ntap to pause recording"
             stopButton.hidden = false
-            //        recordButton.enabled = false
             
             let dirPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
             let recordingName = "my_audio.wav"
@@ -73,13 +65,13 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
     func audioRecorderDidFinishRecording(recorder: AVAudioRecorder, successfully flag: Bool) {
         if (flag) {
             recordedAudio = RecordedAudio(fileUrl: recorder.url, fileTitle: recorder.url.lastPathComponent!)
-            
-            self.performSegueWithIdentifier("stopRecordingSegue", sender: recordedAudio)
+            performSegueWithIdentifier("stopRecordingSegue", sender: recordedAudio)
         }
         else {
-            print("recording failed")
+            let alert = UIAlertController(title: "Error", message: "recording failed", preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+            presentViewController(alert, animated: true, completion: nil)
             stopButton.hidden = true
-//            recordButton.enabled = true
         }
     }
     

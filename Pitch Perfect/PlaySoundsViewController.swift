@@ -27,25 +27,17 @@ class PlaySoundsViewController: UIViewController {
         audioPlayer.enableRate = true
 
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
 
-    func playSound() {
-        audioPlayer.stop()
-        audioEngine.stop()
-        audioEngine.reset()
+    func playSound(rate: Float) {
+        stopSound()
+        audioPlayer.rate = rate
         audioPlayer.currentTime = 0.0
         audioPlayer.play()
     }
     
     func playAudioWithVariablePitch(pitch: Float) {
-        audioPlayer.stop()
-        audioEngine.stop()
-        audioEngine.reset()
+        stopSound()
         
         let audioPlayerNode = AVAudioPlayerNode()
         audioEngine.attachNode(audioPlayerNode)
@@ -64,13 +56,11 @@ class PlaySoundsViewController: UIViewController {
     }
     
     @IBAction func slowButtonClicked(sender: UIButton) {
-        audioPlayer.rate = 0.5
-        playSound()
+        playSound(0.5)
     }
     
     @IBAction func fastButtonClicked(sender: UIButton) {
-        audioPlayer.rate = 2.0
-        playSound()
+        playSound(2.0)
     }
     
     @IBAction func chipmunkButtonClicked(sender: UIButton) {
@@ -81,8 +71,13 @@ class PlaySoundsViewController: UIViewController {
         playAudioWithVariablePitch(-1000)
     }
     
-    @IBAction func stopSound(sender: UIButton) {
+    func stopSound() {
         audioPlayer.stop()
         audioEngine.stop()
+        audioEngine.reset()
+    }
+    
+    @IBAction func stopSound(sender: UIButton) {
+        stopSound()
     }
 }
